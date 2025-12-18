@@ -1,6 +1,17 @@
 ----- Construction Cost Report -----
-Total Material Cost: ₹20100.00
+Project: Home
+
+--- Materials ---
+ID: 3 | Type: Cement | Unit Cost: ₹7.00 | Qty: 900.00 | Total: ₹6300.00 | Date: 2025-12-19 02:19:48.0
+Total Material Cost: ₹6300.00
+
+--- Labor ---
+No labor recorded for this project.
 Total Labor Cost: ₹0.00
+
+--- Equipment ---
+No equipment recorded for this project.
 Total Equipment Cost: ₹0.00
+
 -------------------------------------
-Grand Total: ₹20100.00
+Grand Total: ₹6300.00

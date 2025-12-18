@@ -6,9 +6,14 @@ import java.util.ArrayList;
 public class EquipmentDAO {
 
     public void saveEquipment(String projectName, String equipmentName, double rentalRate, int daysUsed, double totalCost) {
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) {
+            System.out.println("⚠️  Database offline. Equipment stored locally.");
+            return;
+        }
         String sql = "INSERT INTO equipment (project_name, equipment_name, rate_per_day, days_used, total_cost) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection connection = conn;
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
             pstmt.setString(1, projectName);
             pstmt.setString(2, equipmentName);
@@ -25,9 +30,14 @@ public class EquipmentDAO {
 
     public ArrayList<String> getAllEquipment(String projectName) {
         ArrayList<String> equipments = new ArrayList<>();
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) {
+            System.out.println("⚠️  Database offline. No equipment to retrieve.");
+            return equipments;
+        }
         String sql = "SELECT * FROM equipment WHERE project_name = ? ORDER BY created_at DESC";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection connection = conn;
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
             pstmt.setString(1, projectName);
             ResultSet rs = pstmt.executeQuery();
@@ -51,9 +61,14 @@ public class EquipmentDAO {
     }
 
     public void deleteEquipment(int id) {
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) {
+            System.out.println("⚠️  Database offline. Cannot delete equipment.");
+            return;
+        }
         String sql = "DELETE FROM equipment WHERE id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection connection = conn;
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);
             int rowsAffected = pstmt.executeUpdate();
@@ -66,9 +81,14 @@ public class EquipmentDAO {
     }
 
     public double getTotalEquipmentCost(String projectName) {
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) {
+            System.out.println("⚠️  Database offline. Returning 0.");
+            return 0;
+        }
         String sql = "SELECT SUM(total_cost) as total FROM equipment WHERE project_name = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection connection = conn;
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
             pstmt.setString(1, projectName);
             ResultSet rs = pstmt.executeQuery();

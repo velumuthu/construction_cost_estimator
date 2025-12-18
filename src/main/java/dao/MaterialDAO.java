@@ -11,9 +11,14 @@ import materials.Bricks;
 public class MaterialDAO {
 
     public void saveMaterial(String projectName, String materialType, double unitCost, double quantity, double totalCost) {
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) {
+            System.out.println("⚠️  Database offline. Material stored locally.");
+            return;
+        }
         String sql = "INSERT INTO materials (project_name, material_type, unit_cost, quantity, total_cost) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection connection = conn;
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
             pstmt.setString(1, projectName);
             pstmt.setString(2, materialType);
@@ -30,9 +35,14 @@ public class MaterialDAO {
 
     public ArrayList<String> getAllMaterials(String projectName) {
         ArrayList<String> materials = new ArrayList<>();
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) {
+            System.out.println("⚠️  Database offline. No materials to retrieve.");
+            return materials;
+        }
         String sql = "SELECT * FROM materials WHERE project_name = ? ORDER BY created_at DESC";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection connection = conn;
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
             pstmt.setString(1, projectName);
             ResultSet rs = pstmt.executeQuery();
@@ -56,9 +66,14 @@ public class MaterialDAO {
     }
 
     public void deleteMaterial(int id) {
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) {
+            System.out.println("⚠️  Database offline. Cannot delete material.");
+            return;
+        }
         String sql = "DELETE FROM materials WHERE id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection connection = conn;
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);
             int rowsAffected = pstmt.executeUpdate();
@@ -71,9 +86,14 @@ public class MaterialDAO {
     }
 
     public double getTotalMaterialCost(String projectName) {
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) {
+            System.out.println("⚠️  Database offline. Returning 0.");
+            return 0;
+        }
         String sql = "SELECT SUM(total_cost) as total FROM materials WHERE project_name = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection connection = conn;
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
             pstmt.setString(1, projectName);
             ResultSet rs = pstmt.executeQuery();
