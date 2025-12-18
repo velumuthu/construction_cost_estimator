@@ -1,0 +1,6 @@
+----- Construction Cost Report -----
+Total Material Cost: ₹20100.00
+Total Labor Cost: ₹0.00
+Total Equipment Cost: ₹0.00
+-------------------------------------
+Grand Total: ₹20100.00
